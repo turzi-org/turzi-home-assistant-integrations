@@ -1,0 +1,8 @@
+{
+  "name": "Akuvox Integration",
+  "content_in_root": false,
+  "render_readme": true,
+  "domains": ["akuvox"],
+  "country": false,
+  "homeassistant": "2024.1.0"
+}
