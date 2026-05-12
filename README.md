@@ -1,7 +1,7 @@
 # Turzi HA App Connector
 
 <p align="center">
-  <img src="assets/logo-turzi-square.png" alt="Turzi Logo" width="120" />
+  <img src="https://raw.githubusercontent.com/turzi-org/turzi-home-assistant-integrations/main/assets/logo-turzi-square.png" alt="Turzi Logo" width="120" />
 </p>
 
 <p align="center">
@@ -9,11 +9,12 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/turzi-org/turzi_ha_app_connector/releases"><img src="https://img.shields.io/github/v/release/turzi-org/turzi_ha_app_connector?style=flat-square" alt="Release"></a>
-  <a href="https://www.home-assistant.io/"><img src="https://img.shields.io/badge/Home%20Assistant-2024.1.0%2B-blue?style=flat-square&logo=home-assistant" alt="HA Version"></a>
+  <a href="https://github.com/turzi-org/turzi-home-assistant-integrations/releases"><img src="https://img.shields.io/github/v/release/turzi-org/turzi-home-assistant-integrations?style=flat-square" alt="Release"></a>
+  <a href="https://www.home-assistant.io/"><img src="https://img.shields.io/badge/Home%20Assistant-2024.4.0%2B-blue?style=flat-square&logo=home-assistant" alt="HA Version"></a>
   <a href="https://hacs.xyz/"><img src="https://img.shields.io/badge/HACS-Custom-orange?style=flat-square" alt="HACS"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/turzi-org/turzi_ha_app_connector?style=flat-square" alt="License"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/turzi-org/turzi-home-assistant-integrations?style=flat-square" alt="License"></a>
 </p>
+
 
 ---
 
