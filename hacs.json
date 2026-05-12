@@ -1,8 +1,8 @@
 {
-  "name": "Akuvox Integration",
+  "name": "Turzi App Connector",
   "content_in_root": false,
   "render_readme": true,
-  "domains": ["akuvox"],
+  "domains": ["turzi_app_connector"],
   "country": false,
   "homeassistant": "2024.1.0"
 }

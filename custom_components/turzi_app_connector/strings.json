@@ -1,0 +1,78 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "MQTT Broker Configuration",
+        "description": "Configure the connection to your external MQTT broker.",
+        "data": {
+          "broker": "Broker hostname",
+          "port": "Port",
+          "username": "Username",
+          "password": "Password",
+          "house_id": "House ID",
+          "use_tls": "Use TLS"
+        },
+        "data_description": {
+          "broker": "The hostname or IP address of your MQTT broker.",
+          "port": "The port number of your MQTT broker (default: 1883).",
+          "username": "Optional username for MQTT authentication.",
+          "password": "Optional password for MQTT authentication.",
+          "house_id": "A unique identifier for this house (used in MQTT topic prefixes).",
+          "use_tls": "Enable TLS encryption for the MQTT connection."
+        }
+      },
+      "reconfigure": {
+        "title": "Reconfigure MQTT Broker",
+        "description": "Update the MQTT broker connection settings.",
+        "data": {
+          "broker": "Broker hostname",
+          "port": "Port",
+          "username": "Username",
+          "password": "Password",
+          "house_id": "House ID",
+          "use_tls": "Use TLS"
+        },
+        "data_description": {
+          "broker": "The hostname or IP address of your MQTT broker.",
+          "port": "The port number of your MQTT broker (default: 1883).",
+          "username": "Optional username for MQTT authentication.",
+          "password": "Optional password for MQTT authentication.",
+          "house_id": "A unique identifier for this house (used in MQTT topic prefixes).",
+          "use_tls": "Enable TLS encryption for the MQTT connection."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the MQTT broker. Please check your settings.",
+      "invalid_host": "Invalid broker hostname.",
+      "unknown": "An unexpected error occurred."
+    },
+    "abort": {
+      "already_configured": "This house ID is already configured.",
+      "reconfigure_successful": "Broker settings updated successfully."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Select Domains",
+        "description": "Choose which entity domains to expose to the Turzi app. All entities from selected domains will be included by default.",
+        "data": {
+          "included_domains": "Included domains"
+        }
+      },
+      "entities": {
+        "title": "Fine-tune Entities",
+        "description": "Optionally add specific entities from domains not selected above, or exclude specific entities from the selected domains.",
+        "data": {
+          "additional_entities": "Additional entities to include",
+          "excluded_entities": "Entities to exclude"
+        },
+        "data_description": {
+          "additional_entities": "Add specific entities from domains not included in the previous step.",
+          "excluded_entities": "Exclude specific entities from the domains you selected."
+        }
+      }
+    }
+  }
+}
