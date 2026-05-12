@@ -34,7 +34,7 @@ DEFAULT_INCLUDED_DOMAINS = [
 # Panel constants
 PANEL_URL = "/api/turzi_ha_app_connector/panel"
 PANEL_TITLE = "Turzi"
-PANEL_ICON = "mdi:home-automation"
+PANEL_ICON = "mdi:alpha-t-circle"
 PANEL_NAME = "turzi-panel"
 PANEL_FOLDER = "frontend"
 PANEL_FILENAME = "turzi-panel.js"
