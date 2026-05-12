@@ -171,10 +171,10 @@ const STYLES = `
 
 // Badge logic: given (is_exposed, in_domain) → {class, label}
 function statusBadge(is_exposed, in_domain) {
-  if (is_exposed && in_domain)   return { cls: "badge-domain",   label: "Domain" };
-  if (is_exposed && !in_domain)  return { cls: "badge-manual",   label: "Manual" };
-  if (!is_exposed && in_domain)  return { cls: "badge-excluded",  label: "Excluded" };
-  return null; // not exposed, not in domain — no badge
+  if (is_exposed && in_domain)   return { cls: "badge-domain",   label: "Auto Exposed" };
+  if (is_exposed && !in_domain)  return { cls: "badge-manual",   label: "Manually Exposed" };
+  if (!is_exposed && in_domain)  return { cls: "badge-excluded",  label: "User Excluded" };
+  return null;
 }
 
 const ALL_DOMAINS = [
