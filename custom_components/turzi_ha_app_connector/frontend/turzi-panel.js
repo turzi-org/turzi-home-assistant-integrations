@@ -8,7 +8,9 @@ const STYLES = `
     display: block; height: 100%;
     background: var(--primary-background-color);
     font-family: var(--paper-font-body1_-_font-family, Roboto, sans-serif);
-    --accent: var(--primary-color, #03a9f4);
+    --turzi-orange: #FF6600;
+    --turzi-orange-light: rgba(255,102,0,.12);
+    --accent: var(--turzi-orange);
     --card: var(--card-background-color, #fff);
     --divider: var(--divider-color, rgba(0,0,0,.12));
     --text: var(--primary-text-color, #212121);
@@ -22,25 +24,30 @@ const STYLES = `
 
   /* Header */
   .header {
-    background: var(--app-header-background-color, var(--primary-color));
-    color: var(--app-header-text-color, #fff);
+    background: #1a1a1a;
+    border-bottom: 3px solid var(--turzi-orange);
     padding: 0 16px; display: flex; align-items: center; gap: 12px;
-    height: 64px; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,.25);
+    height: 64px; flex-shrink: 0;
   }
-  .header h1 { margin: 0; font-size: 20px; font-weight: 400; flex: 1; letter-spacing: .3px; }
+  .header-logo { width: 32px; height: 32px; object-fit: contain; flex-shrink: 0; }
+  .header-wordmark {
+    font-size: 20px; font-weight: 700; letter-spacing: 1.5px;
+    color: #fff; text-transform: uppercase; flex: 1;
+  }
+  .header-wordmark span { color: var(--turzi-orange); }
 
   /* Tabs */
   .tabs {
     display: flex;
-    background: var(--app-header-background-color, var(--primary-color));
-    padding: 0 16px; flex-shrink: 0; border-bottom: 1px solid rgba(255,255,255,.1);
+    background: #1a1a1a;
+    padding: 0 16px; flex-shrink: 0; border-bottom: 1px solid rgba(255,255,255,.08);
   }
   .tab {
     padding: 12px 20px; cursor: pointer; font-size: 13px; font-weight: 500;
-    color: rgba(255,255,255,.65); border-bottom: 3px solid transparent;
+    color: rgba(255,255,255,.5); border-bottom: 3px solid transparent;
     transition: all .2s; letter-spacing: .5px; text-transform: uppercase; user-select: none;
   }
-  .tab.active { color: #fff; border-bottom-color: #fff; }
+  .tab.active { color: #fff; border-bottom-color: var(--turzi-orange); }
 
   .content { flex: 1; overflow-y: auto; padding: 16px; }
 
@@ -279,9 +286,13 @@ class TurziPanel extends HTMLElement {
   _domains() { return [...new Set(this._entities.map(e => e.domain))].sort(); }
 
   _renderShell() {
+    const LOGO_URL = "/api/turzi_ha_app_connector/panel/turzi-logo.png";
     this.shadowRoot.innerHTML = `<style>${STYLES}</style>
       <div class="layout">
-        <div class="header"><h1>Turzi</h1></div>
+        <div class="header">
+          <img class="header-logo" src="${LOGO_URL}" alt="Turzi" onerror="this.style.display='none'">
+          <div class="header-wordmark">TUR<span>Z</span>I</div>
+        </div>
         <div class="tabs">
           <div class="tab active" data-tab="entities">Entities</div>
           <div class="tab" data-tab="settings">Settings</div>

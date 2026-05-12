@@ -6,6 +6,7 @@ import logging
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.dispatcher import async_dispatcher_send
 
 from .const import (
@@ -28,6 +29,12 @@ type TurziConfigEntry = ConfigEntry
 
 async def async_setup_entry(hass: HomeAssistant, entry: TurziConfigEntry) -> bool:
     """Set up Turzi App Connector from a config entry."""
+
+    # One-time migration: seed exposed_entities for entries that used the old
+    # label-based options schema (which had no exposed_entities key).
+    if CONF_EXPOSED_ENTITIES not in entry.options:
+        await _async_migrate_options(hass, entry)
+
     bridge = TurziMqttBridge.from_config_entry(hass, entry)
 
     hass.data.setdefault(DOMAIN, {})
@@ -65,6 +72,45 @@ async def async_unload_entry(hass: HomeAssistant, entry: TurziConfigEntry) -> bo
         entry.data.get("house_id", "unknown"),
     )
     return True
+
+
+async def _async_migrate_options(hass: HomeAssistant, entry: TurziConfigEntry) -> None:
+    """Seed exposed_entities from included_domains for entries without it.
+
+    This handles upgrades from the old label-based config schema where
+    exposed_entities did not exist. We seed the list by scanning the HA
+    entity registry for entities whose domain is in included_domains.
+    """
+    included_domains: list[str] = entry.options.get(
+        CONF_INCLUDED_DOMAINS, DEFAULT_INCLUDED_DOMAINS
+    )
+    domain_set = set(included_domains)
+
+    registry = er.async_get(hass)
+    exposed: list[str] = [
+        reg_entry.entity_id
+        for reg_entry in registry.entities.values()
+        if not reg_entry.disabled_by and reg_entry.domain in domain_set
+    ]
+
+    new_options = {
+        **entry.options,
+        CONF_INCLUDED_DOMAINS: included_domains,
+        CONF_EXPOSED_ENTITIES: exposed,
+        CONF_AUTO_ADD_NEW: entry.options.get(CONF_AUTO_ADD_NEW, DEFAULT_AUTO_ADD_NEW),
+    }
+
+    # Strip legacy keys from old schema if present
+    for legacy_key in ("expose_label", "label_mode", "additional_entities", "excluded_entities"):
+        new_options.pop(legacy_key, None)
+
+    hass.config_entries.async_update_entry(entry, options=new_options)
+    _LOGGER.info(
+        "Migrated config for house '%s': seeded %d exposed entities from domains %s",
+        entry.data.get("house_id", "unknown"),
+        len(exposed),
+        sorted(domain_set),
+    )
 
 
 async def _async_options_updated(hass: HomeAssistant, entry: TurziConfigEntry) -> None:

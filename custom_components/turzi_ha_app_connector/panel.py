@@ -20,6 +20,9 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
+# Static files base URL (serves the whole frontend/ directory)
+PANEL_STATIC_URL = PANEL_URL  # e.g. /api/turzi_ha_app_connector/panel
+
 
 async def async_register_panel(hass) -> None:
     """Register the Turzi sidebar panel."""
@@ -32,22 +35,23 @@ async def async_register_panel(hass) -> None:
     except OSError:
         cache_bust = 0
 
+    # Serve the entire frontend/ directory so logo.png and other assets are accessible
     await hass.http.async_register_static_paths(
-        [StaticPathConfig(PANEL_URL, js_path, cache_headers=False)]
+        [StaticPathConfig(PANEL_STATIC_URL, panel_dir, cache_headers=False)]
     )
 
     await panel_custom.async_register_panel(
         hass,
         webcomponent_name=PANEL_NAME,
         frontend_url_path=DOMAIN,
-        module_url=f"{PANEL_URL}?v={cache_bust}",
+        module_url=f"{PANEL_STATIC_URL}/{PANEL_FILENAME}?v={cache_bust}",
         sidebar_title=PANEL_TITLE,
         sidebar_icon=PANEL_ICON,
         require_admin=True,
         config={},
         config_panel_domain=DOMAIN,
     )
-    _LOGGER.debug("Registered Turzi panel at %s", PANEL_URL)
+    _LOGGER.debug("Registered Turzi panel at %s", PANEL_STATIC_URL)
 
 
 def async_unregister_panel(hass) -> None:
