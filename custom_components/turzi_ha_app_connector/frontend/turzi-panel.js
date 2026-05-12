@@ -13,6 +13,9 @@ const STYLES = `
     --divider: var(--divider-color, rgba(0,0,0,.12));
     --text: var(--primary-text-color, #212121);
     --sub: var(--secondary-text-color, #727272);
+    --warn: #f59e0b;
+    --danger: #ef5350;
+    --success: #4caf50;
   }
   * { box-sizing: border-box; }
   .layout { display: flex; flex-direction: column; height: 100%; }
@@ -39,13 +42,10 @@ const STYLES = `
   }
   .tab.active { color: #fff; border-bottom-color: #fff; }
 
-  /* Content area */
   .content { flex: 1; overflow-y: auto; padding: 16px; }
 
   /* Toolbar */
-  .toolbar {
-    display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;
-  }
+  .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
   .search-wrap { position: relative; flex: 1; min-width: 160px; }
   .search-wrap ha-icon {
     position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
@@ -57,6 +57,7 @@ const STYLES = `
     background: var(--card); color: var(--text); font-size: 14px; outline: none;
   }
   .search-input:focus { border-color: var(--accent); }
+
   .btn {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 8px 14px; border-radius: 8px; border: none; cursor: pointer;
@@ -67,7 +68,7 @@ const STYLES = `
   .btn-primary:hover:not(:disabled) { opacity: .88; }
   .btn-outline { background: transparent; border: 1.5px solid var(--divider); color: var(--text); }
   .btn-outline:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
-  .btn-danger { background: transparent; border: 1.5px solid #ef5350; color: #ef5350; }
+  .btn-danger { background: transparent; border: 1.5px solid var(--danger); color: var(--danger); }
   .btn-danger:hover:not(:disabled) { background: rgba(239,83,80,.08); }
 
   /* Domain chips */
@@ -79,15 +80,12 @@ const STYLES = `
   }
   .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-  /* Stats bar */
-  .stats {
-    display: flex; align-items: center; gap: 12px;
-    margin-bottom: 10px; font-size: 13px; color: var(--sub);
-  }
+  /* Stats */
+  .stats { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; font-size: 13px; color: var(--sub); }
   .stats strong { color: var(--accent); }
   .stats .sel-label { margin-left: auto; font-weight: 500; color: var(--accent); }
 
-  /* Batch action bar */
+  /* Batch bar */
   .batch-bar {
     display: none; align-items: center; gap: 8px; padding: 10px 14px;
     background: var(--card); border-radius: 10px; margin-bottom: 10px;
@@ -96,30 +94,6 @@ const STYLES = `
   .batch-bar.visible { display: flex; }
   .batch-bar span { font-size: 13px; color: var(--text); font-weight: 500; flex: 1; }
 
-  /* Entity list */
-  .entity-list { display: flex; flex-direction: column; gap: 1px; }
-  .entity-row {
-    display: flex; align-items: center; gap: 10px;
-    padding: 9px 12px; border-radius: 8px;
-    background: var(--card); transition: background .12s; cursor: pointer;
-  }
-  .entity-row:hover { background: var(--secondary-background-color, #f0f0f0); }
-  .entity-row.selected { background: rgba(3,169,244,.08); }
-  .row-checkbox { flex-shrink: 0; width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
-  .entity-icon { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .entity-icon ha-icon { --mdc-icon-size: 20px; color: var(--sub); }
-  .entity-icon ha-icon.on { color: var(--accent); }
-  .entity-info { flex: 1; min-width: 0; }
-  .entity-name { font-size: 14px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .entity-id { font-size: 11px; color: var(--sub); font-family: monospace; }
-  .entity-state { font-size: 12px; color: var(--sub); flex-shrink: 0; min-width: 50px; text-align: right; }
-  .domain-dot {
-    width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
-    background: var(--accent); opacity: 0;
-  }
-  .domain-dot.in-domain { opacity: 1; }
-  ha-switch { flex-shrink: 0; }
-
   /* Select-all row */
   .select-all-row {
     display: flex; align-items: center; gap: 10px;
@@ -127,26 +101,56 @@ const STYLES = `
     border-bottom: 1px solid var(--divider); margin-bottom: 4px;
   }
 
-  /* Empty state */
+  /* Entity list */
+  .entity-list { display: flex; flex-direction: column; gap: 1px; }
+
+  .entity-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px; border-radius: 8px;
+    background: var(--card); transition: background .12s;
+  }
+  .entity-row:hover { background: var(--secondary-background-color, #f0f0f0); }
+  .entity-row.selected { background: rgba(3,169,244,.08); }
+
+  /* Batch-select checkbox (left) */
+  .row-cb { flex-shrink: 0; width: 17px; height: 17px; accent-color: var(--accent); cursor: pointer; }
+
+  /* Expose checkbox (right) — styled prominently */
+  .expose-cb-wrap {
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px;
+  }
+  .expose-cb {
+    width: 20px; height: 20px; accent-color: var(--accent); cursor: pointer;
+  }
+
+  .entity-icon { width: 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .entity-icon ha-icon { --mdc-icon-size: 20px; color: var(--sub); }
+  .entity-icon ha-icon.exposed { color: var(--accent); }
+
+  .entity-info { flex: 1; min-width: 0; }
+  .entity-name { font-size: 14px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .entity-id { font-size: 11px; color: var(--sub); font-family: monospace; }
+
+  /* Status badge */
+  .status-badge {
+    flex-shrink: 0; font-size: 11px; font-weight: 500; padding: 2px 8px;
+    border-radius: 10px; letter-spacing: .3px; white-space: nowrap;
+  }
+  .badge-domain    { background: rgba(3,169,244,.13); color: var(--accent); }
+  .badge-manual    { background: rgba(76,175,80,.13);  color: var(--success); }
+  .badge-excluded  { background: rgba(245,158,11,.13); color: var(--warn); }
+  /* no badge when not-exposed and not in domain */
+
+  /* Empty / Loading */
   .empty { text-align: center; padding: 48px 16px; color: var(--sub); font-size: 14px; }
   .empty ha-icon { --mdc-icon-size: 48px; display: block; margin-bottom: 12px; opacity: .3; }
-
-  /* Loading */
-  .loading {
-    display: flex; align-items: center; justify-content: center;
-    height: 200px; flex-direction: column; gap: 16px; color: var(--sub); font-size: 14px;
-  }
-  .spinner {
-    width: 36px; height: 36px; border: 3px solid var(--divider);
-    border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite;
-  }
+  .loading { display: flex; align-items: center; justify-content: center; height: 200px; flex-direction: column; gap: 16px; color: var(--sub); font-size: 14px; }
+  .spinner { width: 36px; height: 36px; border: 3px solid var(--divider); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
   /* Settings */
-  .settings-section {
-    background: var(--card); border-radius: 12px; padding: 20px; margin-bottom: 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,.07);
-  }
+  .settings-section { background: var(--card); border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.07); }
   .settings-section h3 { margin: 0 0 4px; font-size: 15px; font-weight: 500; color: var(--text); }
   .settings-section p { margin: 0 0 14px; font-size: 13px; color: var(--sub); line-height: 1.5; }
   .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; }
@@ -170,6 +174,14 @@ const STYLES = `
   .save-btn:hover:not(:disabled) { opacity: .88; }
   .save-spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .8s linear infinite; }
 `;
+
+// Badge logic: given (is_exposed, in_domain) → {class, label}
+function statusBadge(is_exposed, in_domain) {
+  if (is_exposed && in_domain)   return { cls: "badge-domain",   label: "Domain" };
+  if (is_exposed && !in_domain)  return { cls: "badge-manual",   label: "Manual" };
+  if (!is_exposed && in_domain)  return { cls: "badge-excluded",  label: "Excluded" };
+  return null; // not exposed, not in domain — no badge
+}
 
 const ALL_DOMAINS = [
   "alarm_control_panel","automation","binary_sensor","button","camera","climate",
@@ -196,11 +208,7 @@ class TurziPanel extends HTMLElement {
     this._renderShell();
   }
 
-  set hass(hass) {
-    const first = !this._hass;
-    this._hass = hass;
-    if (first) this._init();
-  }
+  set hass(hass) { const first = !this._hass; this._hass = hass; if (first) this._init(); }
   set panel(_) {}
 
   async _init() {
@@ -231,10 +239,10 @@ class TurziPanel extends HTMLElement {
     if (this._unsub) { try { this._unsub(); } catch (_) {} }
     this._unsub = await this._hass.connection.subscribeMessage(
       async () => {
-        const prevSelected = new Set(this._selected);
-        this._draft = null; // let settings tab re-read from fresh config
+        const prev = new Set(this._selected);
+        this._draft = null;
         await this._fetchData();
-        this._selected = new Set([...prevSelected].filter(id => this._entities.some(e => e.entity_id === id)));
+        this._selected = new Set([...prev].filter(id => this._entities.some(e => e.entity_id === id)));
         this._render();
       },
       { type: "turzi/subscribe" }
@@ -253,18 +261,16 @@ class TurziPanel extends HTMLElement {
 
   async _saveSettings() {
     if (this._saving) return;
-    this._saving = true;
-    this._render();
+    this._saving = true; this._render();
     try {
       await this._hass.callApi("POST", "turzi/config", {
         entry_id: this._config.entry_id,
         included_domains: this._draft.included_domains,
         auto_add_new: this._draft.auto_add_new,
       });
-      this._draft = null; // will be re-seeded from fresh config on subscribe push
+      this._draft = null;
     } catch (e) { console.error("[Turzi] save failed", e); }
-    this._saving = false;
-    this._render();
+    this._saving = false; this._render();
   }
 
   _filtered() {
@@ -276,9 +282,7 @@ class TurziPanel extends HTMLElement {
     });
   }
 
-  _domains() {
-    return [...new Set(this._entities.map(e => e.domain))].sort();
-  }
+  _domains() { return [...new Set(this._entities.map(e => e.domain))].sort(); }
 
   _renderShell() {
     this.shadowRoot.innerHTML = `<style>${STYLES}</style>
@@ -315,9 +319,8 @@ class TurziPanel extends HTMLElement {
 
   _renderEntities(c) {
     const filtered = this._filtered();
-    const exposed = this._entities.filter(e => e.is_exposed).length;
+    const exposedCount = this._entities.filter(e => e.is_exposed).length;
     const selCount = this._selected.size;
-    const selFiltered = filtered.filter(e => this._selected.has(e.entity_id));
     const allFilteredSelected = filtered.length > 0 && filtered.every(e => this._selected.has(e.entity_id));
 
     const domainChips = this._domains().map(d =>
@@ -326,18 +329,24 @@ class TurziPanel extends HTMLElement {
 
     const rows = filtered.map(e => {
       const sel = this._selected.has(e.entity_id);
-      return `<div class="entity-row${sel ? " selected" : ""}" data-id="${e.entity_id}">
-        <input type="checkbox" class="row-checkbox" ${sel ? "checked" : ""} data-id="${e.entity_id}">
+      const badge = statusBadge(e.is_exposed, e.in_domain);
+      const badgeHtml = badge
+        ? `<span class="status-badge ${badge.cls}">${badge.label}</span>`
+        : `<span style="width:62px"></span>`; // placeholder to keep layout aligned
+
+      return `<div class="entity-row${sel ? " selected" : ""}">
+        <input type="checkbox" class="row-cb" ${sel ? "checked" : ""} data-id="${e.entity_id}">
         <div class="entity-icon">
-          <ha-icon class="${e.is_exposed ? "on" : ""}" icon="${e.icon || "mdi:help-circle-outline"}"></ha-icon>
+          <ha-icon class="${e.is_exposed ? "exposed" : ""}" icon="${e.icon || "mdi:help-circle-outline"}"></ha-icon>
         </div>
         <div class="entity-info">
           <div class="entity-name">${e.name || e.entity_id}</div>
           <div class="entity-id">${e.entity_id}</div>
         </div>
-        <div class="domain-dot${e.in_domain ? " in-domain" : ""}" title="${e.in_domain ? "In included domain" : ""}"></div>
-        <div class="entity-state">${e.state}</div>
-        <ha-switch ${e.is_exposed ? "checked" : ""} data-id="${e.entity_id}" data-expose="${e.is_exposed ? "false" : "true"}"></ha-switch>
+        ${badgeHtml}
+        <div class="expose-cb-wrap">
+          <input type="checkbox" class="expose-cb" ${e.is_exposed ? "checked" : ""} data-id="${e.entity_id}" title="${e.is_exposed ? "Exposed — click to exclude" : "Not exposed — click to expose"}">
+        </div>
       </div>`;
     }).join("") || `<div class="empty"><ha-icon icon="mdi:magnify"></ha-icon>No entities match.</div>`;
 
@@ -345,7 +354,7 @@ class TurziPanel extends HTMLElement {
       <div class="toolbar">
         <div class="search-wrap">
           <ha-icon icon="mdi:magnify"></ha-icon>
-          <input class="search-input" id="search" type="text" placeholder="Search entities…" value="${this._search}">
+          <input class="search-input" id="search" type="text" placeholder="Search by name or entity ID…" value="${this._search}">
         </div>
       </div>
       <div class="domain-chips">
@@ -353,25 +362,28 @@ class TurziPanel extends HTMLElement {
         ${domainChips}
       </div>
       <div class="stats">
-        <span><strong>${exposed}</strong> of ${this._entities.length} exposed</span>
-        <span>·</span>
-        <span>${filtered.length} shown</span>
+        <span><strong>${exposedCount}</strong> of ${this._entities.length} exposed</span>
+        <span>·</span><span>${filtered.length} shown</span>
         ${selCount ? `<span class="sel-label">${selCount} selected</span>` : ""}
       </div>
       <div class="batch-bar${selCount ? " visible" : ""}" id="batch-bar">
         <span>${selCount} selected</span>
-        <button class="btn btn-primary" id="batch-enable">Enable</button>
-        <button class="btn btn-danger" id="batch-disable">Disable</button>
-        <button class="btn btn-outline" id="batch-clear">Clear</button>
+        <button class="btn btn-primary" id="batch-enable">Expose</button>
+        <button class="btn btn-danger" id="batch-disable">Exclude</button>
+        <button class="btn btn-outline" id="batch-clear">Clear selection</button>
       </div>
       <div class="select-all-row">
         <input type="checkbox" id="select-all" ${allFilteredSelected ? "checked" : ""}>
-        <label for="select-all" style="cursor:pointer;font-size:13px;">Select all visible (${filtered.length})</label>
+        <label for="select-all" style="cursor:pointer;font-size:13px;color:var(--sub)">
+          Select all visible (${filtered.length})
+        </label>
       </div>
       <div class="entity-list">${rows}</div>`;
 
     // Search
-    c.querySelector("#search").addEventListener("input", e => { this._search = e.target.value; this._renderContent(); });
+    c.querySelector("#search").addEventListener("input", ev => {
+      this._search = ev.target.value; this._renderContent();
+    });
 
     // Domain chips
     c.querySelectorAll(".chip").forEach(ch =>
@@ -380,28 +392,24 @@ class TurziPanel extends HTMLElement {
 
     // Select all
     c.querySelector("#select-all").addEventListener("change", ev => {
-      if (ev.target.checked) filtered.forEach(e => this._selected.add(e.entity_id));
-      else filtered.forEach(e => this._selected.delete(e.entity_id));
+      filtered.forEach(e => ev.target.checked ? this._selected.add(e.entity_id) : this._selected.delete(e.entity_id));
       this._renderContent();
     });
 
-    // Row checkboxes
-    c.querySelectorAll(".row-checkbox").forEach(cb =>
+    // Batch-select row checkboxes
+    c.querySelectorAll(".row-cb").forEach(cb =>
       cb.addEventListener("change", ev => {
         ev.stopPropagation();
-        const id = cb.dataset.id;
-        if (cb.checked) this._selected.add(id); else this._selected.delete(id);
+        cb.checked ? this._selected.add(cb.dataset.id) : this._selected.delete(cb.dataset.id);
         this._renderContent();
       })
     );
 
-    // Individual switches
-    c.querySelectorAll("ha-switch").forEach(sw =>
-      sw.addEventListener("change", async ev => {
+    // Expose checkboxes (individual toggle)
+    c.querySelectorAll(".expose-cb").forEach(cb =>
+      cb.addEventListener("change", async ev => {
         ev.stopPropagation();
-        const id = sw.dataset.id;
-        const expose = sw.dataset.expose === "true";
-        await this._setExpose([id], expose);
+        await this._setExpose([cb.dataset.id], cb.checked);
       })
     );
 
@@ -409,12 +417,10 @@ class TurziPanel extends HTMLElement {
     if (selCount) {
       const selIds = [...this._selected];
       c.querySelector("#batch-enable").addEventListener("click", async () => {
-        await this._setExpose(selIds, true);
-        this._selected.clear();
+        await this._setExpose(selIds, true); this._selected.clear();
       });
       c.querySelector("#batch-disable").addEventListener("click", async () => {
-        await this._setExpose(selIds, false);
-        this._selected.clear();
+        await this._setExpose(selIds, false); this._selected.clear();
       });
       c.querySelector("#batch-clear").addEventListener("click", () => {
         this._selected.clear(); this._renderContent();
@@ -425,7 +431,6 @@ class TurziPanel extends HTMLElement {
   _renderSettings(c) {
     if (!this._draft) return;
     const d = this._draft;
-
     const domainPills = ALL_DOMAINS.map(dom =>
       `<div class="domain-pill${d.included_domains.includes(dom) ? " selected" : ""}" data-domain="${dom}">${dom}</div>`
     ).join("");
@@ -433,37 +438,33 @@ class TurziPanel extends HTMLElement {
     c.innerHTML = `
       <div class="settings-section">
         <h3>Automatic exposure</h3>
-        <p>When enabled, newly discovered entities from the included domains are automatically exposed.</p>
+        <p>When enabled, new entities from the included domains are automatically exposed as they are added to Home Assistant.</p>
         <div class="toggle-row">
           <div>
-            <div class="toggle-label">Auto-add new entities</div>
-            <div class="toggle-sub">Automatically expose new entities from included domains</div>
+            <div class="toggle-label">Auto-expose new entities</div>
+            <div class="toggle-sub">New entities from included domains are exposed automatically</div>
           </div>
           <ha-switch id="auto-add" ${d.auto_add_new ? "checked" : ""}></ha-switch>
         </div>
       </div>
       <div class="settings-section">
         <h3>Included domains</h3>
-        <p>Entities from selected domains are exposed by default. Adding a domain immediately exposes all its existing entities. Removing a domain does <em>not</em> hide entities — use the Entities tab for fine control.</p>
+        <p>Entities from selected domains are exposed by default (<span class="status-badge badge-domain" style="font-size:11px">Domain</span> badge). Adding a domain exposes all its existing entities immediately. Removing a domain does <em>not</em> exclude those entities — use the Entities tab to fine-tune.</p>
         <div class="domain-grid" id="domain-grid">${domainPills}</div>
       </div>
       <button class="save-btn" id="save-btn" ${this._saving ? "disabled" : ""}>
-        ${this._saving
-          ? '<div class="save-spinner"></div> Saving…'
-          : '<ha-icon icon="mdi:content-save"></ha-icon> Save settings'}
+        ${this._saving ? '<div class="save-spinner"></div> Saving…' : '<ha-icon icon="mdi:content-save"></ha-icon> Save settings'}
       </button>`;
 
-    c.querySelector("#auto-add").addEventListener("change", ev => {
-      this._draft.auto_add_new = ev.target.checked;
-    });
+    c.querySelector("#auto-add").addEventListener("change", ev => { this._draft.auto_add_new = ev.target.checked; });
     c.querySelectorAll(".domain-pill").forEach(p =>
       p.addEventListener("click", () => {
         const dom = p.dataset.domain;
-        if (this._draft.included_domains.includes(dom)) {
-          this._draft.included_domains = this._draft.included_domains.filter(d => d !== dom);
+        if (d.included_domains.includes(dom)) {
+          d.included_domains = d.included_domains.filter(x => x !== dom);
           p.classList.remove("selected");
         } else {
-          this._draft.included_domains.push(dom);
+          d.included_domains.push(dom);
           p.classList.add("selected");
         }
       })
