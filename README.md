@@ -19,7 +19,7 @@
 
 ## Overview
 
-**turzi_bridge** is the official Home Assistant connector for the [Turzi Protocol](PROTOCOL.md). It connects your Home Assistant instance to the Turzi mobile app by maintaining a live MQTT bridge that:
+**turzi Bridge for Home Assistant** is the official HA bridge for the [Turzi Protocol](PROTOCOL.md). It connects your Home Assistant instance to the Turzi mobile app by maintaining a live MQTT bridge that:
 
 - **Publishes** real-time entity state changes from HA to the app
 - **Receives** commands from the app and calls the corresponding HA services
