@@ -1,4 +1,4 @@
-"""The Turzi App Connector integration."""
+"""The turzi Bridge integration."""
 
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ type TurziConfigEntry = ConfigEntry
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: TurziConfigEntry) -> bool:
-    """Set up Turzi App Connector from a config entry."""
+    """Set up turzi Bridge from a config entry."""
 
     # One-time migration: seed exposed_entities for entries that used the old
     # label-based options schema (which had no exposed_entities key).
@@ -48,14 +48,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: TurziConfigEntry) -> boo
     entry.async_on_unload(entry.add_update_listener(_async_options_updated))
 
     _LOGGER.info(
-        "Turzi App Connector set up for house '%s'",
+        "turzi Bridge set up for house '%s'",
         entry.data.get("house_id", "unknown"),
     )
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: TurziConfigEntry) -> bool:
-    """Unload a Turzi App Connector config entry."""
+    """Unload a turzi Bridge config entry."""
     bridge: TurziMqttBridge | None = hass.data.get(DOMAIN, {}).pop(entry.entry_id, None)
 
     if bridge:
@@ -68,7 +68,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: TurziConfigEntry) -> bo
         hass.data.pop(DOMAIN)
 
     _LOGGER.info(
-        "Turzi App Connector unloaded for house '%s'",
+        "turzi Bridge unloaded for house '%s'",
         entry.data.get("house_id", "unknown"),
     )
     return True

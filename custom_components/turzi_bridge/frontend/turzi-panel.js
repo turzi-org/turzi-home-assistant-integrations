@@ -3,7 +3,7 @@
  */
 import { STYLES } from "./turzi-styles.js";
 
-const LOGO = "/api/turzi_ha_app_connector/panel/turzi-logo.png";
+const LOGO = "/api/turzi_bridge/panel/turzi-logo.png";
 const ALL_DOMAINS = [
   "alarm_control_panel","automation","binary_sensor","button","camera","climate",
   "cover","device_tracker","fan","group","humidifier","input_boolean",
@@ -116,7 +116,7 @@ class TurziPanel extends HTMLElement {
       <div class="layout">
         <div class="header">
           <img class="hlogo" src="${LOGO}" alt="" onerror="this.style.display='none'">
-          <div class="hword">turzi App Connector for HA</div>
+          <div class="hword">turzi Bridge for Home Assistant</div>
         </div>
         <div class="tabs">
           <div class="tab active" data-tab="entities">Entities</div>

@@ -1,4 +1,4 @@
-"""Config flow for the Turzi App Connector integration."""
+"""Config flow for the turzi Bridge integration."""
 
 from __future__ import annotations
 
@@ -72,7 +72,7 @@ def _build_broker_schema(defaults: dict[str, Any] | None = None) -> vol.Schema:
 
 
 class TurziAppConnectorConfigFlow(ConfigFlow, domain=DOMAIN):
-    """Handle the config flow for Turzi App Connector.
+    """Handle the config flow for turzi Bridge.
 
     Only broker connectivity is configured here.
     All entity exposure settings are managed via the Turzi sidebar panel.
@@ -117,7 +117,7 @@ class TurziAppConnectorConfigFlow(ConfigFlow, domain=DOMAIN):
                     and reg_entry.domain in domain_set
                 ]
                 return self.async_create_entry(
-                    title=f"Turzi - {user_input[CONF_HOUSE_ID]}",
+                    title=f"turzi Bridge for Home Assistant — {user_input[CONF_HOUSE_ID]}",
                     data=user_input,
                     options={
                         CONF_INCLUDED_DOMAINS: DEFAULT_INCLUDED_DOMAINS,
@@ -158,7 +158,7 @@ class TurziAppConnectorConfigFlow(ConfigFlow, domain=DOMAIN):
             if not errors:
                 return self.async_update_reload_and_abort(
                     entry,
-                    title=f"Turzi - {user_input[CONF_HOUSE_ID]}",
+                    title=f"turzi Bridge for Home Assistant — {user_input[CONF_HOUSE_ID]}",
                     data_updates=user_input,
                 )
 

@@ -1,6 +1,6 @@
-"""Constants for the Turzi App Connector integration."""
+"""Constants for the turzi Bridge integration."""
 
-DOMAIN = "turzi_ha_app_connector"
+DOMAIN = "turzi_bridge"
 
 # Config entry keys (stored in entry.data)
 CONF_BROKER = "broker"
@@ -32,14 +32,14 @@ DEFAULT_INCLUDED_DOMAINS = [
 ]
 
 # Panel constants
-PANEL_URL = "/api/turzi_ha_app_connector/panel"
-PANEL_TITLE = "Turzi"
+PANEL_URL = "/api/turzi_bridge/panel"
+PANEL_TITLE = "turzi Bridge"
 PANEL_ICON = "mdi:alpha-t-circle"
 PANEL_NAME = "turzi-panel"
 PANEL_FOLDER = "frontend"
 PANEL_FILENAME = "turzi-panel.js"
 CUSTOM_COMPONENTS = "custom_components"
-INTEGRATION_FOLDER = "turzi_ha_app_connector"
+INTEGRATION_FOLDER = "turzi_bridge"
 
 # Dispatcher signal for live panel updates
 SIGNAL_CONFIG_UPDATED = f"{DOMAIN}_config_updated"

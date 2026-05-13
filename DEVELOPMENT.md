@@ -1,4 +1,4 @@
-# Turzi HA App Connector — Development Guide
+# turzi Bridge — Development Guide
 
 > **Purpose:** This document is a handoff guide for developers (and AI agents) picking up this project. It describes the complete current architecture, every design decision made, the file structure, the data flow, and the exact state of the codebase as of the last session.
 
@@ -6,11 +6,11 @@
 
 ## Project Summary
 
-`turzi_ha_app_connector` is a custom Home Assistant integration that bridges HA entity states to the Turzi mobile app via an external MQTT broker. It was originally built with a label-based entity management system; that was completely replaced with a simpler `exposed_entities` set stored in `config_entry.options`, managed entirely through a custom HA sidebar panel.
+`turzi_bridge` is a custom Home Assistant integration that bridges HA entity states to the Turzi mobile app via an external MQTT broker. It was originally built with a label-based entity management system; that was completely replaced with a simpler `exposed_entities` set stored in `config_entry.options`, managed entirely through a custom HA sidebar panel.
 
 **Repo:** `https://github.com/turzi-org/turzi-home-assistant-integrations`  
-**Integration path:** `custom_components/turzi_ha_app_connector/`  
-**HA domain:** `turzi_ha_app_connector`
+**Integration path:** `custom_components/turzi_bridge/`  
+**HA domain:** `turzi_bridge`
 
 ---
 
@@ -41,7 +41,7 @@ Home Assistant
 │   └── POST /api/turzi/entities/update  → expose/exclude one or many entities
 │
 └── Sidebar Panel             frontend/turzi-panel.js + turzi-styles.js
-    ├── Served from: /api/turzi_ha_app_connector/panel/<file>
+    ├── Served from: /api/turzi_bridge/panel/<file>
     ├── Tab: Entities (merged with settings)
     └── Tab: Status
 ```
@@ -51,7 +51,7 @@ Home Assistant
 ## File Structure
 
 ```
-custom_components/turzi_ha_app_connector/
+custom_components/turzi_bridge/
 ├── __init__.py           Setup/teardown + one-time migration from old label schema
 ├── config_flow.py        UI flow for broker setup (ConfigFlow + reconfigure step)
 ├── const.py              All constants — config keys, defaults, MQTT params
@@ -113,10 +113,10 @@ On first startup after upgrading from the label schema, `__init__.py` checks if 
 All config mutations go through `hass.config_entries.async_update_entry()`. The `_async_options_updated` listener in `__init__.py` calls `bridge.update_config()` which diffs the old/new exposed sets and publishes/clears MQTT messages in real time.
 
 ### 4. Panel Static Files
-`panel.py` registers the **entire `frontend/` directory** as a static path at `/api/turzi_ha_app_connector/panel/`. This means:
-- JS: `/api/turzi_ha_app_connector/panel/turzi-panel.js`
-- Logo: `/api/turzi_ha_app_connector/panel/turzi-logo.png`
-- Styles module: `/api/turzi_ha_app_connector/panel/turzi-styles.js`
+`panel.py` registers the **entire `frontend/` directory** as a static path at `/api/turzi_bridge/panel/`. This means:
+- JS: `/api/turzi_bridge/panel/turzi-panel.js`
+- Logo: `/api/turzi_bridge/panel/turzi-logo.png`
+- Styles module: `/api/turzi_bridge/panel/turzi-styles.js`
 
 The panel JS uses ES module `import` syntax: `import { STYLES } from "./turzi-styles.js"`.
 
@@ -228,7 +228,7 @@ After editing `turzi-panel.js` or `turzi-styles.js`, just hard-refresh the brows
 
 ### Installing in HA
 
-Copy the `custom_components/turzi_ha_app_connector/` folder to your HA `config/custom_components/` and restart. The panel JS is served without cache headers and uses a `?v={mtime}` cache-bust query string so browsers pick up changes on HA restart.
+Copy the `custom_components/turzi_bridge/` folder to your HA `config/custom_components/` and restart. The panel JS is served without cache headers and uses a `?v={mtime}` cache-bust query string so browsers pick up changes on HA restart.
 
 ---
 

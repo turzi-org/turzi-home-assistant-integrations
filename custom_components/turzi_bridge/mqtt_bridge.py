@@ -1,4 +1,4 @@
-"""MQTT Bridge for the Turzi App Connector integration.
+"""MQTT Bridge for the turzi Bridge integration.
 
 This module implements the MQTT transport binding of the Turzi Protocol.
 It manages the connection to an external MQTT broker and handles:

@@ -1,4 +1,4 @@
-"""Panel registration for Turzi App Connector."""
+"""Panel registration for turzi Bridge."""
 
 import os
 import logging
@@ -21,7 +21,7 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 # Static files base URL (serves the whole frontend/ directory)
-PANEL_STATIC_URL = PANEL_URL  # e.g. /api/turzi_ha_app_connector/panel
+PANEL_STATIC_URL = PANEL_URL  # e.g. /api/turzi_bridge/panel
 
 
 async def async_register_panel(hass) -> None:

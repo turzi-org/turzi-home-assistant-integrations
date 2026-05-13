@@ -1,7 +1,7 @@
-# Turzi HA App Connector
+# turzi Bridge for Home Assistant
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/turzi-org/turzi-home-assistant-integrations/main/custom_components/turzi_ha_app_connector/brand/logo.png" alt="Turzi" width="120" />
+  <img src="https://raw.githubusercontent.com/turzi-org/turzi-home-assistant-integrations/main/custom_components/turzi_bridge/brand/logo.png" alt="Turzi" width="120" />
 </p>
 
 <p align="center">
@@ -19,7 +19,7 @@
 
 ## Overview
 
-**turzi_ha_app_connector** is the official Home Assistant connector for the [Turzi Protocol](PROTOCOL.md). It connects your Home Assistant instance to the Turzi mobile app by maintaining a live MQTT bridge that:
+**turzi_bridge** is the official Home Assistant connector for the [Turzi Protocol](PROTOCOL.md). It connects your Home Assistant instance to the Turzi mobile app by maintaining a live MQTT bridge that:
 
 - **Publishes** real-time entity state changes from HA to the app
 - **Receives** commands from the app and calls the corresponding HA services
@@ -49,12 +49,12 @@ All entity exposure is managed through a **custom sidebar panel** — no need to
 
 1. Open **HACS** → **Integrations** → ⋮ menu → **Custom repositories**
 2. Add `https://github.com/turzi-org/turzi-home-assistant-integrations` as a custom repository (category: **Integration**)
-3. Find **Turzi HA App Connector** in HACS and click **Download**
+3. Find **turzi Bridge** in HACS and click **Download**
 4. Restart Home Assistant
 
 ### Manual
 
-1. Copy the `custom_components/turzi_ha_app_connector/` folder into your HA `config/custom_components/` directory
+1. Copy the `custom_components/turzi_bridge/` folder into your HA `config/custom_components/` directory
 2. Restart Home Assistant
 
 ---
@@ -64,7 +64,7 @@ All entity exposure is managed through a **custom sidebar panel** — no need to
 ### Initial Setup
 
 1. Go to **Settings → Devices & Services → Add Integration**
-2. Search for **Turzi HA App Connector**
+2. Search for **turzi Bridge**
 3. Fill in your MQTT broker details:
 
 | Field | Description | Default |
