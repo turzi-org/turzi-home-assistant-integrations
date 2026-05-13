@@ -27,6 +27,7 @@ class TurziPanel extends HTMLElement {
     this._sel = new Set(); this._loading = true; this._unsub = null;
     this._draft = null; this._saveTimer = null; this._saving = false;
     this._dpSearch = ""; this._dpOpen = false;
+    this._outsideClickHandler = null;
     this.attachShadow({mode:"open"});
     this._shell();
   }
@@ -218,11 +219,20 @@ class TurziPanel extends HTMLElement {
     dpi.addEventListener("keydown", ev => {
       if (ev.key==="Escape") { this._dpOpen=false; ddd.classList.remove("open"); }
     });
-    document.addEventListener("click", ev => {
-      if (!c.querySelector(".dpick")?.contains(ev.target)) {
-        this._dpOpen=false; ddd.classList.remove("open");
+
+    // Remove any previous outside-click listener before adding a new one
+    if (this._outsideClickHandler) {
+      this.shadowRoot.removeEventListener("mousedown", this._outsideClickHandler, true);
+    }
+    this._outsideClickHandler = ev => {
+      const dpick = this.shadowRoot.querySelector(".dpick");
+      if (dpick && !dpick.contains(ev.composedPath()[0])) {
+        this._dpOpen = false;
+        const d = this.shadowRoot.getElementById("ddd");
+        if (d) d.classList.remove("open");
       }
-    }, {once:true});
+    };
+    this.shadowRoot.addEventListener("mousedown", this._outsideClickHandler, true);
 
     // Dropdown item click
     c.querySelectorAll(".ddi:not(.empty-msg)").forEach(item => item.addEventListener("click", () => {
