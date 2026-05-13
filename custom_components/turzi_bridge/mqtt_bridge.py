@@ -148,12 +148,14 @@ class TurziMqttBridge:
         }
 
     def _log_event(self, level: str, message: str) -> None:
-        """Append an event to the ring-buffer log."""
+        """Append an event to the ring-buffer log and notify the panel."""
         self._event_log.append({
             "time": datetime.now(tz=timezone.utc).isoformat(),
             "level": level,
             "message": message,
         })
+        from homeassistant.helpers.dispatcher import async_dispatcher_send
+        async_dispatcher_send(self.hass, SIGNAL_CONFIG_UPDATED)
 
     def update_config(
         self,

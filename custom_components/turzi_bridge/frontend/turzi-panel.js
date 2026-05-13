@@ -28,6 +28,7 @@ class TurziPanel extends HTMLElement {
     this._draft = null; this._saveTimer = null; this._saving = false;
     this._dpSearch = ""; this._dpOpen = false;
     this._outsideClickHandler = null;
+    this._pollTimer = null;
     this.attachShadow({mode:"open"});
     this._shell();
   }
@@ -63,6 +64,21 @@ class TurziPanel extends HTMLElement {
       this._sel = new Set([...prev].filter(id=>this._ents.some(e=>e.entity_id===id)));
       this._render();
     }, {type:"turzi/subscribe"});
+  }
+
+  _startStatusPoll() {
+    this._stopStatusPoll();
+    this._pollTimer = setInterval(async () => {
+      if (this._tab !== "status") { this._stopStatusPoll(); return; }
+      try {
+        this._status = await this._hass.connection.sendMessagePromise({type:"turzi/status"});
+        this._render();
+      } catch(_) {}
+    }, 5000);
+  }
+
+  _stopStatusPoll() {
+    if (this._pollTimer) { clearInterval(this._pollTimer); this._pollTimer = null; }
   }
 
   // Auto-save with 1s debounce
@@ -129,6 +145,8 @@ class TurziPanel extends HTMLElement {
       t.addEventListener("click", () => {
         this._tab=t.dataset.tab; this._sel.clear();
         this.shadowRoot.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===t));
+        if (this._tab === "status") this._startStatusPoll();
+        else this._stopStatusPoll();
         this._render();
       })
     );
